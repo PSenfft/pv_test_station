@@ -8,7 +8,7 @@
   #define RFM95_RST   4
 
   // Change to 434.0 or other frequency, must match RX's freq!
-#define RF95_FREQ 433.0
+#define RF95_FREQ 434.0
 
 // Singleton instance of the radio driver
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
@@ -68,10 +68,10 @@ void setup() {
   //  1  0  1   0x1D
   //  1  1  0   0x1E
   //  1  1  1   0x1F
-  if (!tempsensor.begin(0x18)) {
-    Serial.println("Couldn't find MCP9808! Check your connections and verify the address is correct.");
-    while (1);
-  }
+  //if (!tempsensor.begin(0x18)) {
+  //  Serial.println("Couldn't find MCP9808! Check your connections and verify the address is correct.");
+  //  while (1);
+  //}
     
    Serial.println("Found MCP9808!");
 
@@ -84,6 +84,13 @@ void setup() {
 }
 
 int16_t packetnum = 0;  // packet counter, we increment per xmission
+
+float read_temp(){
+    tempsensor.wake();   // wake up, ready to read!
+    float temp = tempsensor.readTempC();
+    tempsensor.shutdown_wake(1); // shutdown MSP9808 - power consumption ~0.1 mikro Ampere, stops temperature sampling
+    return temp;
+}
 
 void loop() {
   delay(1000); // Wait 1 second between transmits, could also 'sleep' here!
@@ -122,11 +129,4 @@ void loop() {
   } else {
     Serial.println("No reply, is there a listener around?");
   }
-}
-
-float read_temp(){
-    tempsensor.wake();   // wake up, ready to read!
-    float temp = tempsensor.readTempC();
-    tempsensor.shutdown_wake(1); // shutdown MSP9808 - power consumption ~0.1 mikro Ampere, stops temperature sampling
-    return temp;
 }
