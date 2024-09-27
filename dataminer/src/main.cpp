@@ -111,7 +111,7 @@ void setup() {
   pinMode(PPS_PIN, INPUT);
   pinMode(VOLTAGE_METER_PIN, INPUT);
   pinMode(CURRENT_METER_PIN, INPUT);
-  attachInterrupt(digitalPinToInterrupt(PPS_PIN), pps_isr, RISING);
+  attachInterrupt(PPS_PIN, pps_isr, RISING);
 
 
   // Set up the timer (use a 16-bit timer)
@@ -129,7 +129,7 @@ void setup() {
   Serial.println("Serial connected");
 
   zerotimer.setCallback(true, TC_CALLBACK_CC_CHANNEL1, timer_isr); // Attach ISR to timer
-  zerotimer.enable(true);  // Enable timer
+  //zerotimer.enable(true);  // Enable timer
 
   while (!Serial){
     Serial.println("Serial is not available");
@@ -146,12 +146,13 @@ void setup() {
 void loop() {
   timer_util(); //manage timer
 
+  if(flags.pps_isr == 1){ 
+    Serial.println(gps.satellites.value());
+    flags.pps_isr = 0;
+  }
 
   if(timer_flags.loop_interval){
     Serial.println("Hello World");
     timer_flags.loop_interval = 0;
-    }
-
-  if(flags.pps_isr){ Serial.println("PPS"); }
-
+  }
 }
