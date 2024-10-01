@@ -17,3 +17,12 @@ extern uint16_t current;
 extern float temp_env;
 extern float temp_panel;
 extern uint32_t timestamp;
+
+extern struct flags
+{
+  uint8_t time_util:1;         //flag for util timer
+  uint8_t pps_isr:1;           //flag for PPS interrupt
+  uint8_t gps_connected:1;     //flag for GPS connection
+} flags;
+
+
