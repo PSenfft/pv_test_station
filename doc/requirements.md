@@ -26,8 +26,23 @@ The System has many sensors for the power measurement and the temperatur. The pl
 
 ## Circuit diagram
 
-
+![PXL_20241002_170940363~2](https://github.com/user-attachments/assets/a554ddd2-987b-41a4-b51a-8d934b707e7e)
 
 ## Protocol
 
 ![PXL_20241002_162630208~2](https://github.com/user-attachments/assets/00d5ead2-207e-48eb-a023-3717233414ea)
+
+## Parts
+
+- [ ] 1x (Adafruit Feather M0 LoRa Radio - 433MHz)[https://www.mouser.de/account/orders/detail?qs=Sn2QTPuoay%252BUEfD1VQ4ZfDkVjOmp3iWeccA1x4dP3mE%3d]
+- [ ] 1x (Adafruit LoRa Radio Bonnet - 433MHz)[https://www.mouser.de/ProductDetail/485-4075]
+- [ ] 1x Raspberry Pi 4
+- [ ] 1x Current Sensor [CT426-HSN830DR](https://www.mouser.de/ProductDetail/462-CT426-HSN830DR)
+- [ ] 2x [MCP9808 Temp Sensor Breakout Adafruit](https://www.mouser.de/ProductDetail/485-1782)
+- [ ] 47K Resistor
+- [ ] 3,3K Resistor
+- [ ] (Adafruit DS3231 Precision RTC)[https://www.mouser.de/ProductDetail/485-5188]
+- [ ] I2C extender (LTC4311) [https://www.mouser.de/ProductDetail/485-4756]
+- [ ] EEPROM (M24C01-WMN6P) [https://www.mouser.de/ProductDetail/511-M24C01-WMN6P]
+- [ ] (433MHz Antenna db station) [https://www.mouser.de/ProductDetail/538-204287-0100]
+- [ ] (433MHz Antenna dataminer)[https://www.mouser.de/ProductDetail/712-ANT-433-PW-QWUFL]
