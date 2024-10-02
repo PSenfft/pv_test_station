@@ -23,3 +23,11 @@ This is Project is a Real-time System with soft time limits. The system should m
 ![image](https://github.com/user-attachments/assets/37c90a3b-ba38-4e24-bffb-13c7e6fcdb8e)
 
 The System has many sensors for the power measurement and the temperatur. The plant is the evironment and the sun and the controller is the ATSAMD21G18 microcontroller.
+
+## Circuit diagram
+
+
+
+## Protocol
+
+![PXL_20241002_162630208~2](https://github.com/user-attachments/assets/00d5ead2-207e-48eb-a023-3717233414ea)
