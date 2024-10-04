@@ -1,9 +1,11 @@
+#pragma once
+
 #include <Arduino.h>
 #include <string.h>
-#include <Adafruit_ZeroTimer.h>
 #include "temp.h"
 #include "lora.h"
 #include "gps.h"
+#include "timer.h"
 
 #define PPS_PIN 13  // PPS signal from GPS module
 #define VOLTAGE_METER_PIN A1  // Voltage meter signal
@@ -18,11 +20,14 @@ extern float temp_env;
 extern float temp_panel;
 extern uint32_t timestamp;
 
-extern struct flags
+struct Flags
 {
-  uint8_t time_util:1;         //flag for util timer
-  uint8_t pps_isr:1;           //flag for PPS interrupt
-  uint8_t gps_connected:1;     //flag for GPS connection
-} flags;
+  uint8_t timer_interrupt : 1;  // flag for util timer
+  uint8_t pps_interrupt : 1;          // flag for PPS interrupt
+  uint8_t gps_connected : 1;    // flag for GPS connection
+};
+
+// Declare the variable as extern
+extern Flags flags;
 
 

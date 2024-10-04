@@ -1,30 +1,40 @@
 #include "main.h"
 
-Adafruit_ZeroTimer zerotimer = Adafruit_ZeroTimer(3);
+struct Data{
+  uint16_t voltage: 12;
+  uint16_t current: 12;
+  uint16_t temp_env: 13;
+  uint16_t temp_panel: 13;
+  uint32_t timestamp: 32;
+} datas = {0, 0, 0, 0, 0};
 
-uint16_t voltage = 0;
-uint16_t current = 0;
-float temp_env = 0;
-float temp_panel = 0;
-uint32_t timestamp = 0;
+Flags flags = {0, 0, 0};
 
+void timerISR(){
+  flags.timer_interrupt = 1;
 
-struct flag
-{
-  uint8_t time_util:1;         //flag for util timer
-  uint8_t pps_isr:1;           //flag for PPS interrupt
-  uint8_t gps_connected:1;     //flag for GPS connection
-} flags;
-
+  #if (TIMER_INTERRUPT_DEBUG > 0)
+      static uint32_t curMillis = 0;
+        
+      curMillis = millis();
+      
+      if (curMillis > TIMER_INTERVAL_MS)
+      {
+        Serial.print("ITimer: millis() = "); Serial.print(curMillis);
+        Serial.print(", delta = "); Serial.println(curMillis - preMillisTimer);
+      }
+      
+      preMillisTimer = curMillis;
+  #endif
+  }
 
 void pps_isr(){
-  flags.pps_isr = 1;
+  flags.pps_interrupt = 1;
 }
 
-
-//check if gps ios connected, otherwise use counter
+//check if gps is connected, otherwise use counter
 void pulse_from_GPS(){
-  if (flags.pps_isr){
+  if (flags.pps_interrupt){
     flags.gps_connected = 1;
   }
   else{
@@ -32,16 +42,16 @@ void pulse_from_GPS(){
   }
 }
 
-void read_voltage(){
-  analogRead(VOLTAGE_METER_PIN);
+uint32_t read_voltage(){
+  return analogRead(VOLTAGE_METER_PIN);
 }
 
-void read_current(){
-  analogRead(CURRENT_METER_PIN);
+uint32_t read_current(){
+  return analogRead(CURRENT_METER_PIN);
 }
 
 void createPacket(uint8_t* packet) {
-    // Wir kopieren die Daten in das Byte-Array
+    // copy Data to  Byte-Array
     memcpy(packet, &temp_env, sizeof(float));
     memcpy(packet + sizeof(float), &temp_panel, sizeof(float));
     memcpy(packet + 2 * sizeof(float), &voltage, sizeof(uint16_t));
@@ -55,52 +65,61 @@ void transmitData() {
     rf95.send(packet, sizeof(packet));
 }
 
+// Init selected SAMD timer
+SAMDTimer ITimer(SELECTED_TIMER);
+
+volatile uint32_t preMillisTimer = 0;
+
+void init_timer(){
+  Serial.print(F("\nStarting TimerInterruptTest on ")); Serial.println(BOARD_NAME);
+  Serial.println(SAMD_TIMER_INTERRUPT_VERSION);
+  Serial.print(F("CPU Frequency = ")); Serial.print(F_CPU / 1000000); Serial.println(F(" MHz"));
+
+  // Interval in millisecs
+  if (ITimer.attachInterruptInterval_MS(TIMER_INTERVAL_MS, timerISR))
+  {
+    preMillisTimer = millis();
+    Serial.print(F("Starting ITimer OK, millis() = ")); Serial.println(preMillisTimer);
+  }
+  else
+    Serial.println(F("Can't set ITimer. Select another freq. or timer"));
+}
+
 void setup() {
   pinMode(PPS_PIN, INPUT);
   pinMode(VOLTAGE_METER_PIN, INPUT);
   pinMode(CURRENT_METER_PIN, INPUT);
   attachInterrupt(PPS_PIN, pps_isr, RISING);
 
-
-  // Set up the timer (use a 16-bit timer)
-  zerotimer.enable(false); // Disable while configuring
-  zerotimer.configure(TC_CLOCK_PRESCALER_DIV64,       // prescaler 64
-                      TC_COUNTER_SIZE_16BIT,          // bit width of timer/counter
-                      TC_WAVE_GENERATION_MATCH_FREQ,  // match frequency generation mode
-                      TC_COUNT_DIRECTION_UP);         // period value
-  zerotimer.setCompare(1, 7500); // Set the compare value to 7500 for 10ms intervals
-
-  //-----init Serial-----
-  Serial.begin(115200);       
-  Serial1.begin(9600);
-
-  Serial.println("Serial connected");
-
-  zerotimer.setCallback(true, TC_CALLBACK_CC_CHANNEL1, timer_isr); // Attach ISR to timer
-  //zerotimer.enable(true);  // Enable timer
-
   while (!Serial){
     Serial.println("Serial is not available");
     delay(10);  
   }
+  init_gps();
 
+  delay(100);
+  
+  //init_timer();
   //-----init LoRa-----
-  //init_lora();
+  init_lora();
 
   // -----init Temp-----
-  //init_temp();  
+  init_temp(); 
 }
 
 void loop() {
-  timer_util(); //manage timer
+/*   if(flags.timer_interrupt){
+    Serial.println("wake up");
+    Serial.println(millis());
+    wakeup_temp_environment();
+    wakeup_temp_panel();
+    flags.timer_interrupt = 0;
+  } */
 
-  if(flags.pps_isr == 1){ 
-    Serial.println(gps.satellites.value());
-    flags.pps_isr = 0;
-  }
+  fucking_temp_loop();
 
-  if(timer_flags.loop_interval){
-    Serial.println("Hello World");
-    timer_flags.loop_interval = 0;
+  if(flags.pps_interrupt){
+    
   }
 }
+
