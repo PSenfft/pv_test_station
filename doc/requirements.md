@@ -50,4 +50,4 @@ The System has many sensors for the power measurement and the temperatur. The pl
 - [ ] (433MHz Antenna dataminer)[https://www.mouser.de/ProductDetail/712-ANT-433-PW-QWUFL]
 - [ ] (MPPT Controller (Off-Grid))[https://www.offgridtec.com/victron-smartsolar-mppt-75-15-15a-12v-24v-solar-laderegler.html]
 - [ ] Dummyload ~500W immersion heaters
-- [ ] Relais 24V 20A
+- [ ] (Relais 24V 20A) [https://www.digikey.de/de/products/detail/american-zettler/AZ576-1A-5DE/14307551]
