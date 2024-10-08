@@ -51,3 +51,4 @@ The System has many sensors for the power measurement and the temperatur. The pl
 - [ ] (MPPT Controller (Off-Grid))[https://www.offgridtec.com/victron-smartsolar-mppt-75-15-15a-12v-24v-solar-laderegler.html]
 - [ ] Dummyload ~500W immersion heaters
 - [ ] (Relais 24V 20A) [https://www.digikey.de/de/products/detail/american-zettler/AZ576-1A-5DE/14307551]
+- [ ] (Step Down DC/DC) [https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/908/DFR0571_Web.pdf]
