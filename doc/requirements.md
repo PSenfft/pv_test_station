@@ -16,7 +16,9 @@ To accurately calculate the economic feasibility, a measurement station is to be
 - Meassure Power, Temperature of the Panel and the Environment
 - Measurement interval every second
 - Store the Data in a safe place
+- The future Park will probably be built with Bifacial Cells from Huasun with 470Wp. The test station should use comparable cells
 
+  
 ## Realtime definition
 This is Project is a Real-time System with soft time limits. The system should measure every second. But when there is an issue and the time is not reached, it's bad but has no catastrophic impact like an Airbag system.
 
@@ -46,3 +48,6 @@ The System has many sensors for the power measurement and the temperatur. The pl
 - [ ] EEPROM (M24C01-WMN6P) [https://www.mouser.de/ProductDetail/511-M24C01-WMN6P]
 - [ ] (433MHz Antenna db station) [https://www.mouser.de/ProductDetail/538-204287-0100]
 - [ ] (433MHz Antenna dataminer)[https://www.mouser.de/ProductDetail/712-ANT-433-PW-QWUFL]
+- [ ] (MPPT Controller (Off-Grid))[https://www.offgridtec.com/victron-smartsolar-mppt-75-15-15a-12v-24v-solar-laderegler.html]
+- [ ] Dummyload ~500W immersion heaters
+- [ ] Relais 24V 20A
