@@ -43,6 +43,7 @@ The System has many sensors for the power measurement and the temperatur. The pl
 - [ ] 2x [MCP9808 Temp Sensor Breakout Adafruit](https://www.mouser.de/ProductDetail/485-1782)
 - [ ] 47K Resistor
 - [ ] 3,3K Resistor
+- [ ] 1uF capacitor (X5R)
 - [ ] (Adafruit DS3231 Precision RTC)[https://www.mouser.de/ProductDetail/485-5188]
 - [ ] I2C extender (LTC4311) [https://www.mouser.de/ProductDetail/485-4756]
 - [ ] EEPROM (M24C01-WMN6P) [https://www.mouser.de/ProductDetail/511-M24C01-WMN6P]
