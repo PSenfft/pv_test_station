@@ -52,3 +52,5 @@ The System has many sensors for the power measurement and the temperatur. The pl
 - [ ] Dummyload ~500W immersion heaters
 - [ ] (Relais 24V 20A) [https://www.digikey.de/de/products/detail/american-zettler/AZ576-1A-5DE/14307551]
 - [ ] (Step Down DC/DC) [https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/908/DFR0571_Web.pdf]
+- [ ] PCB to Wire connector panel side min 43V 14A (Phoenic Contact 277-1579-ND)[https://www.digikey.de/de/products/detail/phoenix-contact/1935187/568616]
+- [ ] PCB to Wire connector load side min 24V 21A (Phoenic Contact 277-17516-ND) [https://www.digikey.de/de/products/detail/phoenix-contact/1017505/9346606]
