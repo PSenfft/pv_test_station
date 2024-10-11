@@ -7,12 +7,20 @@
 #include "gps.h"
 #include "timer.h"
 
+#define RELAIS_PIN 5  // Relais signal
 #define PPS_PIN 13  // PPS signal from GPS module
 #define VOLTAGE_METER_PIN A1  // Voltage meter signal
 #define CURRENT_METER_PIN A2  // Current meter signal
 
 #define TEMP_WAKE_TIME 70 // 70 * 10ms = 700ms to wakeup temp sensor 300 ms before reading
 #define LOOP_INTERVAL 10 // 10 * 100ms = 1s loop interval
+
+#define ADC_MAX 4095.0
+#define V_REF 3.3
+#define V_SAT 2.65
+#define V_OFFSET 0.65
+#define V_SPAN (V_REF - V_OFFSET)
+#define I_MAX 30000 //30A as mA
 
 extern uint16_t voltage;
 extern uint16_t current;

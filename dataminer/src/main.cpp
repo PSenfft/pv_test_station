@@ -46,8 +46,24 @@ uint32_t read_voltage(){
   return analogRead(VOLTAGE_METER_PIN);
 }
 
+//0.65V Voltage quicent
+//2,65V sensor saturation
+//Resulution 66.7mV/A
+uint32_t compute_current(uint32_t adcValue){     
+  return current;
+  if (current > 806 && ) {
+    double voltage = (adcValue / ADC_MAX) * V_REF;
+    double current = ((voltage - V_OFFSET) / V_SPAN) * I_MAX;
+    uint16_t float_current = static_cast<uint16_t>(current);
+    return float_current;
+
+  }else{
+    return 0;
+  }
+}
+
 uint32_t read_current(){
-  return analogRead(CURRENT_METER_PIN);
+  return analogRead(CURRENT_METER_PIN);       //analog read 0-4095
 }
 
 void createPacket(uint8_t* packet) {
