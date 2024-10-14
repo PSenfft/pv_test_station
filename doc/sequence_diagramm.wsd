@@ -1,0 +1,49 @@
+@startuml
+box "dataminer"
+participant main
+participant gps_module
+participant tempsensors
+participant currentsensors
+participant loRa
+end box
+
+box "db_station"
+participant lora
+participant db_main
+participant influxDB
+participant HDD_Backup
+end box
+
+main -> gps_module: more then 3 sat?
+
+main -> main: wait 700ms
+main -> tempsensors: wake
+main -> main: wait 260ms
+main -> tempsensors: read temp
+main -> currentsensors: read current
+main -> main: read voltage
+
+alt pps based
+   gps_module -> main: yes
+   main -> main: wait for pps
+   gps_module -> main: pps_signal
+
+else timer based
+   gps_module -> main: no
+   main -> main: wait for 1s timer
+end
+main -> loRa: send protcol
+
+loop
+   db_main -> lora: new data?
+   db_main -> db_main: wait 1s
+end loop
+loRa -> lora: send protcol
+lora -> db_main: data
+db_main -> influxDB: write in DB
+
+loop "backup"
+    influxDB -> HDD_Backup: make backup
+    influxDB -> influxDB: wait 1 day
+end loop
+@enduml
