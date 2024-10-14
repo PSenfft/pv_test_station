@@ -9,7 +9,6 @@
 - [ ] 1uF capacitor (X5R)
 - [ ] (Adafruit DS3231 Precision RTC)[https://www.mouser.de/ProductDetail/485-5188]
 - [ ] I2C extender (LTC4311) [https://www.mouser.de/ProductDetail/485-4756]
-- [ ] EEPROM (M24C01-WMN6P) [https://www.mouser.de/ProductDetail/511-M24C01-WMN6P]
 - [ ] (433MHz Antenna db station) [https://www.mouser.de/ProductDetail/538-204287-0100]
 - [ ] (433MHz Antenna dataminer)[https://www.mouser.de/ProductDetail/712-ANT-433-PW-QWUFL]
 - [ ] (MPPT Controller (Off-Grid))[https://www.offgridtec.com/victron-smartsolar-mppt-75-15-15a-12v-24v-solar-laderegler.html]
@@ -18,3 +17,5 @@
 - [ ] (Step Down DC/DC) [https://www.digikey.de/de/products/detail/dfrobot/DFR0571/9559261]
 - [ ] PCB to Wire connector panel side min 43V 14A (Phoenic Contact 277-1579-ND)[https://www.digikey.de/de/products/detail/phoenix-contact/1017505/9346606]
 - [ ] PCB to Wire connector load side min 24V 21A (Phoenic Contact 277-17516-ND)[https://www.digikey.de/de/products/detail/phoenix-contact/1017521/9346615]
+- [ ] (Mosfet for  relias)[https://www.digikey.de/de/products/detail/onsemi/2N7002/244345]
+- [ ] (FRAM)[https://www.digikey.de/de/products/detail/adafruit-industries-llc/1895/4990784]
