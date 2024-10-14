@@ -1,8 +1,20 @@
 # Parts list
-- [ ] RaspberryPi 4 (as DB server and receiver)
-- [ ] Raspberry Pico (sender)
-- [ ] LORA shild rasperry 433Mhz
-- [ ] shunt resisitor (as Ampmeter) https://www.mouser.de/ProductDetail/Bourns/CSS2H-2512R-L300F?qs=5aG0NVq1C4z51we9vC1w9A%3D%3D
-- [ ] 47k and 3,3k Resistor (voltage divider to meassure the Voltage with the Pico)
-- [ ] ADT 7410 temperature sensor
-- [ ] MPPT
+- [ ] 1x (Adafruit Feather M0 LoRa Radio - 433MHz)[https://www.mouser.de/account/orders/detail?qs=Sn2QTPuoay%252BUEfD1VQ4ZfDkVjOmp3iWeccA1x4dP3mE%3d]
+- [ ] 1x (Adafruit LoRa Radio Bonnet - 433MHz)[https://www.mouser.de/ProductDetail/485-4075]
+- [ ] 1x Raspberry Pi 4
+- [ ] 1x Current Sensor [CT426-HSN830DR](https://www.mouser.de/ProductDetail/462-CT426-HSN830DR)
+- [ ] 2x [MCP9808 Temp Sensor Breakout Adafruit](https://www.mouser.de/ProductDetail/485-1782)
+- [ ] 47K Resistor
+- [ ] 3,3K Resistor
+- [ ] 1uF capacitor (X5R)
+- [ ] (Adafruit DS3231 Precision RTC)[https://www.mouser.de/ProductDetail/485-5188]
+- [ ] I2C extender (LTC4311) [https://www.mouser.de/ProductDetail/485-4756]
+- [ ] EEPROM (M24C01-WMN6P) [https://www.mouser.de/ProductDetail/511-M24C01-WMN6P]
+- [ ] (433MHz Antenna db station) [https://www.mouser.de/ProductDetail/538-204287-0100]
+- [ ] (433MHz Antenna dataminer)[https://www.mouser.de/ProductDetail/712-ANT-433-PW-QWUFL]
+- [ ] (MPPT Controller (Off-Grid))[https://www.offgridtec.com/victron-smartsolar-mppt-75-15-15a-12v-24v-solar-laderegler.html]
+- [ ] Dummyload ~500W immersion heaters
+- [ ] (Relais 24V 20A) [https://www.digikey.de/de/products/detail/american-zettler/AZ576-1A-5DE/14307551]
+- [ ] (Step Down DC/DC) [https://www.digikey.de/de/products/detail/dfrobot/DFR0571/9559261]
+- [ ] PCB to Wire connector panel side min 43V 14A (Phoenic Contact 277-1579-ND)[https://www.digikey.de/de/products/detail/phoenix-contact/1017505/9346606]
+- [ ] PCB to Wire connector load side min 24V 21A (Phoenic Contact 277-17516-ND)[https://www.digikey.de/de/products/detail/phoenix-contact/1017521/9346615]
