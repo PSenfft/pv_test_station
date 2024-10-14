@@ -5,7 +5,6 @@
 #include "temp.h"
 #include "lora.h"
 #include "gps.h"
-#include "timer.h"
 
 #define RELAIS_PIN 5  // Relais signal
 #define PPS_PIN 13  // PPS signal from GPS module
