@@ -12,7 +12,8 @@ struct Data{
 
 Flags flags = {0, 0, 0};
 
-int last_millis = 0;
+unsigned long currentMillis = 0;
+unsigned long previousMillis = 0;
 
 // --- iunterrupts ---
 void pps_isr(){
@@ -20,6 +21,7 @@ void pps_isr(){
 }
 
 void measure_everything(){
+
   //TODO read voltage
   //TODO read current
   //TODO read temp_env
@@ -27,12 +29,13 @@ void measure_everything(){
   //TODO read timestamp
 }
 
+//check date
 void check_timings(){
   // if no interrupt from PPS signal leave function
   if (!flags.pps_interrupt){ return;}
 
+  //read gps and decide if gps or rtc time is to be used
   read_gps();
-
   //proof if gps time is valid otherwise set flag to use rtc time
   if(get_unix_time_from_gps() < POSSIBLE_TIME){
     flags.use_gps_time = 0; // GPS time is not valid use RTC time
@@ -44,6 +47,18 @@ void check_timings(){
   //TODO set wachdog timer
 
   flags.pps_interrupt = 0;
+}
+
+void temp_sensor_wakeup_timer(){
+  if (currentMillis - previousMillis >= SLEEPTIME_TEMP) {
+    Serial.println("Timer 2: 700 milliseconds have passed!");
+    wakeup_temp_environment();
+    wakeup_temp_panel();
+  }
+}
+
+void reset_temp_sensor_wakeup_timer(){
+  previousMillis = currentMillis; // Reset the timer
 }
 
 void init_rtc(){
@@ -72,11 +87,10 @@ void setup() {
 }
 
 void loop() {
+  currentMillis = millis();
+
   // put your main code here, to run repeatedly:
   Serial.println("Hello World");
-
-  wakeup_temp_environment();
-  delay(300);
 
   Serial.print("Temp: "); 
   Serial.print(read_temp_environment(), 4); 
