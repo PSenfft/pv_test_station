@@ -14,7 +14,7 @@
 #define CURRENT_METER_PIN A2  // Current meter signal
 
 #define SLEEPTIME_TEMP 700 //time controller can sleep, to have enaugh time to wake up temp sensor (300 ms is needed)
-#define LOOP_INTERVAL 10 // 10 * 100ms = 1s loop interval
+#define TIME_SYNC_INTERVAL 300000 //time interval to sync time with gps 300.000ms = 5 min
 
 #define POSSIBLE_TIME 1000000000 // time at 2001, bigger the defult failur time from gps,  but still defitly wrong
 
@@ -36,6 +36,7 @@ struct Flags
   uint8_t pps_interrupt : 1;    // flag for PPS interrupt
   uint8_t use_gps_pps : 1;      // flag for util timer
   uint8_t use_gps_time : 1;     // flag for GPS connection
+  uint8_t temo_sensor_wakeup_triggert : 1; // flag for temp sensor wakeup
 };
 
 // Declare the variable as extern
