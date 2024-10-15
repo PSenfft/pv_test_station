@@ -8,7 +8,7 @@ struct Data{
   uint16_t temp_env: 13;
   uint16_t temp_panel: 13;
   uint32_t timestamp: 32;
-} datas = {0, 0, 0, 0, 0};
+} data = {0, 0, 0, 0, 0};
 
 Flags flags = {0, 0, 0};
 
@@ -39,6 +39,38 @@ void reset_temp_sensor_wakeup_timer(){
   previousMillis_temp_timper = currentMillis_temp_timer; // Reset the timer
 }
 
+uint16_t read_voltage(){
+  uint32_t adc_Value = analogRead(VOLTAGE_METER_PIN);
+  double voltage = (adc_Value / ADC_MAX) * V_REF;
+  return static_cast<uint16_t>(voltage);
+}
+
+//0.65V Voltage quicent
+//2,65V sensor saturation
+//Resulution 66.7mV/A
+uint16_t read_current(){     
+  uint32_t adc_Value = analogRead(CURRENT_METER_PIN);       //analog read 0-4095
+  
+  // return 0 if current is below 0.65V
+  if (adc_Value < 807){
+    return 0;
+  }
+
+  double voltage = (adc_Value / ADC_MAX) * V_REF;
+  double current = ((voltage - V_OFFSET) / V_SPAN) * I_MAX;
+  uint16_t float_current = static_cast<uint16_t>(current);
+  return float_current;
+}
+
+void createPacket(uint8_t* packet) {
+    // copy Data to  Byte-Array
+    memcpy(packet, &temp_env, sizeof(float));
+    memcpy(packet + sizeof(float), &temp_panel, sizeof(float));
+    memcpy(packet + 2 * sizeof(float), &voltage, sizeof(uint16_t));
+    memcpy(packet + 2 * sizeof(float) + sizeof(uint16_t), &current, sizeof(uint16_t));
+    memcpy(packet + 2 * sizeof(float) + 2 * sizeof(uint16_t), &timestamp, sizeof(uint32_t));
+}
+
 //measure all sensors
 void measure_everything(){
 
@@ -59,11 +91,18 @@ void measure_everything(){
 
   Serial.print("Sats: ");
   Serial.println(get_sat_amount());
-  //TODO read voltage
-  //TODO read current
-  //TODO read temp_env
-  //TODO read temp_panel
-  //TODO read timestamp
+  
+  
+  data.voltage = read_voltage();
+  data.current = read_current();
+  data.temp_env = read_temp_environment();
+  data.temp_panel = read_temp_panel();
+
+  if (flags.use_gps_time){
+    data.timestamp = get_unix_time_from_gps();
+  }else{
+    data.timestamp = rtc.now().timestamp();
+  }
 
   reset_temp_sensor_wakeup_timer();
 }
