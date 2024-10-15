@@ -22,9 +22,8 @@ void init_gps(){
 void read_gps(){
     while (Serial1.available()){
         gps.encode(Serial1.read());
-        }
-
-    // Retrieve date and time from GPS
+    }
+    // store retrieved gps data
     year = gps.date.year();
     month = gps.date.month();
     day = gps.date.day();
@@ -33,7 +32,7 @@ void read_gps(){
     second = gps.time.second();
 }
 
-uint32_t get_unix_time(){
+uint32_t get_unix_time_from_gps(){
    // Create a tm structure
     struct tm t;
     t.tm_year = year - 1900; // tm_year is years since 1900
