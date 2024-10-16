@@ -15,6 +15,3 @@ void wakeup_temp_panel();
 //read temperature and set sensor to sleep
 float read_temp_environment();
 float read_temp_panel();
-
-
-void fucking_temp_loop();

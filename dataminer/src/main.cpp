@@ -82,6 +82,8 @@ void packDataToBinary(Data &data, uint8_t *buffer) {
 
   // Copy timestamp (32 bits) into the last 4 bytes
   uint32_t timestamp = data.timestamp;
+  Serial.print("timestamp: ");
+  Serial.println(timestamp);
   memcpy(buffer + 7, &timestamp, 4); // 32 bits for the timestamp
 }
 
@@ -122,9 +124,11 @@ void measure_everything(){
     Serial.println("Using GPS time");
     data.timestamp = get_unix_time_from_gps();
   }else{
+    Serial.println("Using RTC time");
+    Serial.println(rtc.now().timestamp());
     data.timestamp = timestamp_to_unix(rtc.now().timestamp());
   }
-  Serial.println("time: ");
+  Serial.print("time: ");
   Serial.println(data.timestamp);
   packDataToBinary(data, buffer);
   printBinaryPackage(buffer, sizeof(buffer));
@@ -170,7 +174,12 @@ void init_rtc(){
     Serial.flush();
     while (1) delay(10);
   }
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  
+  DateTime now = DateTime(F(__DATE__), F(__TIME__));
+  // Subtract 2 hours for UTC adjustment
+  now = now - TimeSpan(0, 2, 0, 0);  // TimeSpan(days, hours, minutes, seconds)
+
+  rtc.adjust(now);
 }
 
 void setup() {

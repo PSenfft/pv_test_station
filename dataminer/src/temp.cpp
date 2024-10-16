@@ -69,23 +69,3 @@ float read_temp_panel(){
   }
   return 0;
 }
-
-void fucking_temp_loop(){
-  Serial.println("wake up MCP9808.... "); // wake up MCP9808 - power consumption ~200 mikro Ampere
-  tempsensor_environment.wake();   // wake up, ready to read!
-
-  // Read and print out the temperature, also shows the resolution mode used for reading.
-  Serial.print("Resolution in mode: ");
-  Serial.println (tempsensor_environment.getResolution());
-  float c = tempsensor_environment.readTempC();
-  float f = tempsensor_environment.readTempF();
-  Serial.print("Temp: "); 
-  Serial.print(c, 4); Serial.print("*C\t and "); 
-  Serial.print(f, 4); Serial.println("*F.");
-  
-  delay(2000);
-  Serial.println("Shutdown MCP9808.... ");
-  tempsensor_environment.shutdown_wake(1); // shutdown MSP9808 - power consumption ~0.1 mikro Ampere, stops temperature sampling
-  Serial.println("");
-  delay(200);
-}
