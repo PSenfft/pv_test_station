@@ -113,18 +113,19 @@ time_t timestamp_to_unix(String iso_timestamp_string) {
 
 //measure all sensors
 void measure_everything(){
-  Serial.println("Measuring everything");
   data.voltage = read_voltage();
   data.current = read_current();
   data.temp_env = read_temp_environment();
   data.temp_panel = read_temp_panel();
 
   if (flags.use_gps_time){
+    Serial.println("Using GPS time");
     data.timestamp = get_unix_time_from_gps();
   }else{
     data.timestamp = timestamp_to_unix(rtc.now().timestamp());
   }
-
+  Serial.println("time: ");
+  Serial.println(data.timestamp);
   packDataToBinary(data, buffer);
   printBinaryPackage(buffer, sizeof(buffer));
 
@@ -132,10 +133,11 @@ void measure_everything(){
 }
 
 void sync_time(){
-  Serial.println("Syncing time");
   if ((currentMillis_rtc_time_sync - previousMillis_rtc_time_sync >= TIME_SYNC_INTERVAL) && get_sat_amount() > 3) {
     if(flags.use_gps_time){
       rtc.adjust(DateTime(get_unix_time_from_gps()));
+      Serial.println("Syncing time.. Sat: ");
+      Serial.println(get_sat_amount());
     }
     previousMillis_rtc_time_sync = currentMillis_rtc_time_sync; // Reset the timer
   }
