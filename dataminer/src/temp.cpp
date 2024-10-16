@@ -37,8 +37,6 @@ void init_temp(){
 //wakeup sensor without delay (ther is a delay of 250ms until the sensor is ready to read)
 void wakeup_temp_environment(){
   if (sensors_available.temp_environment == 1) {
-    Serial.println("wakeup temp");
-    Serial.println(millis());
     tempsensor_environment.shutdown_wake(0); // wake up MSP9808 - power consumption ~200 mikro Ampere, starts temperature sampling
   }
 }

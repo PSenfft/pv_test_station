@@ -5,7 +5,11 @@ RTC_DS3231 rtc;
 // Create a buffer to hold the binary data
 uint8_t buffer[11]; // 12 bits + 12 bits + 13 bits + 13 bits + 32 bits = ~82 bits = ~10.25 bytes, we use 8 bytes for alignment
 
-Data data = {0, 0, 0, 0, 0};
+uint16_t voltage = 0;        // voltage in mV
+uint16_t current = 0;        // current in mA
+float temp_env = 0.0;          // temperature in °C with 4 digits behind the comma
+float temp_panel = 0.0;        // temperature in °C with 4 digits behind the comma
+uint32_t timestamp = 0;
 
 Flags flags = {0, 0, 0};
 
@@ -22,23 +26,26 @@ void pps_isr(){
 
 //wakeup temp sensor when timer is over // has to be resetted after meassuring
 void temp_sensor_wakeup_timer(){
-  if (currentMillis_temp_timer - previousMillis_temp_timper >= SLEEPTIME_TEMP && flags.temo_sensor_wakeup_triggert == 0) {
+  if (currentMillis_temp_timer - previousMillis_temp_timper >= SLEEPTIME_TEMP && flags.temp_sensor_wakeup_triggert == 0) {
+
+    Serial.print("wakeup: ");
+    Serial.println(millis());
 
     wakeup_temp_environment();
     wakeup_temp_panel();
-    flags.temo_sensor_wakeup_triggert = 1;
+    flags.temp_sensor_wakeup_triggert = 1;
   }
 }
 
 void reset_temp_sensor_wakeup_timer(){
-  flags.temo_sensor_wakeup_triggert = 0;
+  flags.temp_sensor_wakeup_triggert = 0;
   previousMillis_temp_timper = currentMillis_temp_timer; // Reset the timer
 }
 
 uint16_t read_voltage(){
   uint32_t adc_Value = analogRead(VOLTAGE_METER_PIN);
-  double voltage = (adc_Value / ADC_MAX) * V_REF;
-  return static_cast<uint16_t>(voltage);
+  uint16_t voltage = (adc_Value / ADC_MAX) * V_REF;
+  return voltage;
 }
 
 //0.65V Voltage quicent
@@ -52,39 +59,37 @@ uint16_t read_current(){
     return 0;
   }
 
-  double voltage = (adc_Value / ADC_MAX) * V_REF;
-  double current = ((voltage - V_OFFSET) / V_SPAN) * I_MAX;
-  uint16_t float_current = static_cast<uint16_t>(current);
-  return float_current;                         //return current in mA
+  uint16_t voltage = (adc_Value / ADC_MAX) * V_REF;
+  uint16_t current = ((voltage - V_OFFSET) / V_SPAN) * I_MAX;
+  return current;                         //return current in mA
 }
 
-// Function to print the binary package for testing
-void printBinaryPackage(uint8_t *buffer, size_t length) {
+void createPacket(uint8_t* packet) {
+    // copy Data to  Byte-Array
+    memcpy(packet, &temp_env, sizeof(float));
+    memcpy(packet + sizeof(float), &temp_panel, sizeof(float));
+    memcpy(packet + 2 * sizeof(float), &voltage, sizeof(uint16_t));
+    memcpy(packet + 2 * sizeof(float) + sizeof(uint16_t), &current, sizeof(uint16_t));
+    memcpy(packet + 2 * sizeof(float) + 2 * sizeof(uint16_t), &timestamp, sizeof(uint32_t));
+}
+
+void printPacket(uint8_t *packet, size_t length) {
   for (size_t i = 0; i < length; i++) {
-    Serial.print(buffer[i], HEX);
+    // Print each byte in hexadecimal
+    Serial.print(packet[i], HEX);
+
+    // Add a space between bytes for better readability
     Serial.print(" ");
   }
-  Serial.println();
+  Serial.println(); // Newline after printing the entire packet
 }
 
-// Function to pack the Data struct into an 11-byte binary array
-void packDataToBinary(Data &data, uint8_t *buffer) {
-  // Clear the buffer
-  memset(buffer, 0, 11);
+void transmitData() {
+    uint8_t packet[16];  // 2 x float (8 Byte), 2 x uint16_t (4 Byte), 1 x uint32_t (4 Byte) -> 16 Byte
+    createPacket(packet);
 
-  // Packing the data manually into the buffer
-  uint32_t temp1 = (data.voltage & 0xFFF) | ((data.current & 0xFFF) << 12); // Pack voltage + current
-  uint32_t temp2 = (data.temp_env & 0x1FFF) | ((data.temp_panel & 0x1FFF) << 13); // Pack temp_env + temp_panel
-
-  // Copy them into the buffer (packing in chunks of bits)
-  memcpy(buffer, &temp1, 3);  // First 24 bits: voltage + current (12 + 12)
-  memcpy(buffer + 3, &temp2, 4); // Next 26 bits: temp_env + temp_panel (13 + 13)
-
-  // Copy timestamp (32 bits) into the last 4 bytes
-  uint32_t timestamp = data.timestamp;
-  Serial.print("timestamp: ");
-  Serial.println(timestamp);
-  memcpy(buffer + 7, &timestamp, 4); // 32 bits for the timestamp
+    printPacket(packet, sizeof(packet));
+    rf95.send(packet, sizeof(packet));
 }
 
 // Function to convert ISO 8601 date to Unix timestamp
@@ -115,25 +120,29 @@ time_t timestamp_to_unix(String iso_timestamp_string) {
 
 //measure all sensors
 void measure_everything(){
-  data.voltage = read_voltage();
-  data.current = read_current();
-  data.temp_env = read_temp_environment();
-  data.temp_panel = read_temp_panel();
+  voltage = read_voltage();
+  current = read_current();
+  temp_env = read_temp_environment();
+  temp_panel = read_temp_panel();
+  Serial.print("sleep now: ");
+  Serial.println(millis());
+  reset_temp_sensor_wakeup_timer();
+
+  Serial.print("temp: ");
+  Serial.println(temp_env, 4);
 
   if (flags.use_gps_time){
     Serial.println("Using GPS time");
-    data.timestamp = get_unix_time_from_gps();
+    timestamp = get_unix_time_from_gps();
   }else{
     Serial.println("Using RTC time");
     Serial.println(rtc.now().timestamp());
-    data.timestamp = timestamp_to_unix(rtc.now().timestamp());
+    timestamp = timestamp_to_unix(rtc.now().timestamp());
   }
   Serial.print("time: ");
-  Serial.println(data.timestamp);
-  packDataToBinary(data, buffer);
-  printBinaryPackage(buffer, sizeof(buffer));
+  Serial.println(timestamp);
 
-  reset_temp_sensor_wakeup_timer();
+  transmitData();
 }
 
 void sync_time(){
@@ -174,7 +183,7 @@ void init_rtc(){
     Serial.flush();
     while (1) delay(10);
   }
-  
+
   DateTime now = DateTime(F(__DATE__), F(__TIME__));
   // Subtract 2 hours for UTC adjustment
   now = now - TimeSpan(0, 2, 0, 0);  // TimeSpan(days, hours, minutes, seconds)
@@ -202,6 +211,5 @@ void loop() {
   currentMillis_temp_timer = millis();
   temp_sensor_wakeup_timer();
   check_timings();
-  
 }
 
