@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <ArduinoLowPower.h>
+#include <time.h>
 #include <string.h>
 #include <RTCLib.h>
 #include "temp.h"
@@ -38,6 +39,16 @@ struct Flags
   uint8_t use_gps_time : 1;     // flag for GPS connection
   uint8_t temo_sensor_wakeup_triggert : 1; // flag for temp sensor wakeup
 };
+
+struct Data { 
+  uint16_t voltage: 12;
+  uint16_t current: 12;
+  uint16_t temp_env: 13;
+  uint16_t temp_panel: 13;
+  uint32_t timestamp: 32;
+};
+
+extern Data data;
 
 // Declare the variable as extern
 extern Flags flags;
