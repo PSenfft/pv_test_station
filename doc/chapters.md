@@ -9,5 +9,8 @@
   - Tempsemsor
   - GPS module
   - RTC
+- Endianness
+  - Little-Endian
+  - Big-Endian:   
 - shematics
   
