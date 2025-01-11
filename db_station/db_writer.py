@@ -1,7 +1,8 @@
-import influxdb_client
-from influxdb_client import Point, WritePrecision  # Add WritePrecision import
-from influxdb_client.client.write_api import SYNCHRONOUS
+import struct
+import datetime
 import time
+from influxdb_client import InfluxDBClient, Point, WritePrecision, WriteOptions
+
 # Import Python System Libraries
 import time
 # Import Blinka Libraries
@@ -10,21 +11,65 @@ from digitalio import DigitalInOut, Direction, Pull
 import board
 # Import the SSD1306 module.
 import adafruit_ssd1306
-# Import RFM9x
+# Import the RFM69 radio module.
 import adafruit_rfm9x
 
-# Initialize InfluxDBClient
-token = os.environ.get("INFLUXDB_TOKEN")
-org = "pv_test_station"
-url = "http://raspberrypi.local:8086"
 
-client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
+# Replace the following with your InfluxDB connection details
+url = "http://raspberrypi.local:8086"                                                                    # InfluxDB URL
+token = "ZMaJlSEokqxFana4X3JT8cSP5T3iUQ1VQn67ql4mGhA8Rb8Wmtr4PQn-Rpu8cYKJj7uSuqHcfY7hX8yEIagwQw=="      # InfluxDB token
+org = "pv_test_station"                                                                                 # Your organization name
+bucket = "testbucket"                                                                                        # Your bucket name
 
-# Define bucket
-bucket = "pv_db"
+# Initialize InfluxDB client
+client = InfluxDBClient(url=url, token=token, org=org)
 
-# Write data
-write_api = client.write_api(write_options=SYNCHRONOUS)
+# Use synchronous write for simplicity
+write_api = client.write_api(write_options=WriteOptions(batch_size=1))
+
+
+def write_to_db(package):
+    # Parse the packet
+    # Adjust the format string if data types or endianness differ
+    temp_panel, temp_env, voltage, current, timestamp = struct.unpack('>ffHHI', package)
+
+    # Convert timestamp to datetime object
+    timestamp_datetime = datetime.datetime.utcfromtimestamp(timestamp)
+
+    # Create points for each measurement
+    points = []
+
+    # TempPanel
+    point_temp_panel = Point("TempPanel") \
+        .field("value", temp_panel) \
+        .time(timestamp_datetime, WritePrecision.S)
+    points.append(point_temp_panel)
+
+    # TempEnv
+    point_temp_env = Point("TempEnv") \
+        .field("value", temp_env) \
+        .time(timestamp_datetime, WritePrecision.S)
+    points.append(point_temp_env)
+
+    # Voltage
+    point_voltage = Point("Voltage") \
+        .field("value", voltage) \
+        .time(timestamp_datetime, WritePrecision.S)
+    points.append(point_voltage)
+
+    # Current
+    point_current = Point("Current") \
+        .field("value", current) \
+        .time(timestamp_datetime, WritePrecision.S)
+    points.append(point_current)
+
+    # Write the points to InfluxDB
+    write_api.write(bucket=bucket, org=org, record=points)
+
+    # Close the client
+    client.close()
+
+    print("Data written to InfluxDB successfully.")
 
 
 ##Button init (unnecessary)
@@ -59,11 +104,9 @@ height = display.height
 CS = DigitalInOut(board.CE1)
 RESET = DigitalInOut(board.D25)
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
-rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, 915.0)
+rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, 434.0)
 rfm9x.tx_power = 23
 prev_packet = None
-
-display.fill(0)             #clear display 
 
 
 def write_to_db(temp_env, temp_panel, ampere, voltage, timestamp):
@@ -80,22 +123,66 @@ def write_to_db(temp_env, temp_panel, ampere, voltage, timestamp):
     # Write the point to the bucket
     write_api.write(bucket=bucket, org=org, record=point)
 
+
 while True:
-    packet = None
+    package = None
+    # draw a box to clear the image
+    display.fill(0)
+    display.text('RasPi LoRa', 35, 0, 1)
 
     # check for packet rx
-    packet = rfm9x.receive()
-    if packet is None:
-        break
+    package = rfm9x.receive()
+    if package is None:
+        display.show()
+        display.text('- Waiting for PKT -', 15, 20, 1)
     else:
-        data = packet.split(",")
-        temp_env = data[0]
-        temp_panel = data[1]
-        ampere = data[2]
-        voltage = data[3]
-        timestamp = data[4]
+        # Display the packet text and rssi
+        display.fill(0)
+        prev_packet = package
+        packet_text = prev_packet.hex()
+        display.text('RX: ', 0, 0, 1)
+        display.text(packet_text, 25, 0, 1)
 
-        write_to_db(temp_env, temp_panel, ampere, voltage, timestamp)
+        # Parse the packet
+        # Adjust the format string if data types or endianness differ
+        temp_panel, temp_env, voltage, current, timestamp = struct.unpack('>ffHHI', package)
+
+        # Convert timestamp to datetime object
+        timestamp_datetime = datetime.datetime.utcfromtimestamp(timestamp)
+
+        # Create points for each measurement
+        points = []
+
+                # TempPanel
+        point_temp_panel = Point("TempPanel") \
+            .field("value", temp_panel) \
+            .time(timestamp_datetime, WritePrecision.S)
+        points.append(point_temp_panel)
+
+        # TempEnv
+        point_temp_env = Point("TempEnv") \
+            .field("value", temp_env) \
+            .time(timestamp_datetime, WritePrecision.S)
+        points.append(point_temp_env)
+
+        # Voltage
+        point_voltage = Point("Voltage") \
+            .field("value", voltage) \
+            .time(timestamp_datetime, WritePrecision.S)
+        points.append(point_voltage)
+
+        # Current
+        point_current = Point("Current") \
+            .field("value", current) \
+            .time(timestamp_datetime, WritePrecision.S)
+        points.append(point_current)
+
+        # Write the points to InfluxDB
+        write_api.write(bucket=bucket, org=org, record=points)
+
+        # Close the client
+        client.close()  
+        time.sleep(1)
 
     display.show()
     time.sleep(0.1)
