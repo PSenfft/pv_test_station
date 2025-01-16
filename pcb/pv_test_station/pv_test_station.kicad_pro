@@ -466,10 +466,10 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "../production_files/",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "pv_test_station.step",
       "svg": "",
       "vrml": ""
     },
