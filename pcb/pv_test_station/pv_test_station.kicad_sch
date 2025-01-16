@@ -4201,6 +4201,16 @@
 	)
 	(wire
 		(pts
+			(xy 137.16 72.39) (xy 140.97 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6dcd0699-fec9-4fc8-8848-e6c6fa392499")
+	)
+	(wire
+		(pts
 			(xy 153.67 120.65) (xy 153.67 119.38)
 		)
 		(stroke
@@ -4278,6 +4288,26 @@
 			(type default)
 		)
 		(uuid "8624798e-d934-448a-86fb-7763b1111fdb")
+	)
+	(wire
+		(pts
+			(xy 259.08 96.52) (xy 260.35 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "870d4576-0378-4853-819e-bc9d877fa7ce")
+	)
+	(wire
+		(pts
+			(xy 259.08 99.06) (xy 260.35 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b769766-6eba-4748-a921-b0090d74070d")
 	)
 	(wire
 		(pts
@@ -4441,6 +4471,16 @@
 	)
 	(wire
 		(pts
+			(xy 260.35 88.9) (xy 269.24 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac92379c-dc76-486f-a0d4-8995b17ba24d")
+	)
+	(wire
+		(pts
 			(xy 261.62 93.98) (xy 269.24 93.98)
 		)
 		(stroke
@@ -4511,6 +4551,16 @@
 	)
 	(wire
 		(pts
+			(xy 267.97 101.6) (xy 269.24 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b6677020-cf70-40b8-b9f9-d09f7378dede")
+	)
+	(wire
+		(pts
 			(xy 57.15 74.93) (xy 66.04 74.93)
 		)
 		(stroke
@@ -4518,6 +4568,16 @@
 			(type default)
 		)
 		(uuid "baf78610-97f1-4963-afe8-38f782929d35")
+	)
+	(wire
+		(pts
+			(xy 259.08 101.6) (xy 260.35 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bba9be27-6339-42ed-b185-420ce50e93d1")
 	)
 	(wire
 		(pts
@@ -4721,6 +4781,16 @@
 	)
 	(wire
 		(pts
+			(xy 267.97 99.06) (xy 269.24 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0bf8532-c403-4359-91fc-db982ea251a3")
+	)
+	(wire
+		(pts
 			(xy 261.62 86.36) (xy 269.24 86.36)
 		)
 		(stroke
@@ -4728,6 +4798,16 @@
 			(type default)
 		)
 		(uuid "f23ca2ea-eb47-402c-8a9a-d0bfecd55721")
+	)
+	(wire
+		(pts
+			(xy 267.97 96.52) (xy 269.24 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f7fb8dbd-2888-4871-b713-0e7eca381f02")
 	)
 	(wire
 		(pts
@@ -4911,6 +4991,18 @@
 		)
 		(uuid "05ab1a90-3aef-466f-9e24-481f10f8843d")
 	)
+	(hierarchical_label "WP"
+		(shape output)
+		(at 260.35 88.9 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1a200922-c9ec-4cbc-a142-f64e67db1d72")
+	)
 	(hierarchical_label "RelaisPin"
 		(shape output)
 		(at 137.16 67.31 180)
@@ -5090,6 +5182,18 @@
 			(justify right)
 		)
 		(uuid "a988d2ae-6750-4c1a-978b-7cba5c8e3e5d")
+	)
+	(hierarchical_label "WP"
+		(shape input)
+		(at 137.16 72.39 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ba62b657-192d-41fe-a0f3-2221e1d3e136")
 	)
 	(hierarchical_label "SDA"
 		(shape output)
@@ -5559,6 +5663,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3.3V")
+		(at 259.08 99.06 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "11747159-a845-4523-a4a1-eef12d7c3904")
+		(property "Reference" "#PWR020"
+			(at 262.89 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 255.27 99.0599 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 259.08 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 259.08 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 259.08 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "55420eeb-d144-44b9-907d-e390b3d95bfd")
+		)
+		(instances
+			(project "pv_test_station"
+				(path "/bdb092a0-94d1-4700-b8bd-9fdfadb16bd3"
+					(reference "#PWR020")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:Fuse")
 		(at 180.34 41.91 90)
 		(unit 1)
@@ -6005,6 +6176,73 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 264.16 99.06 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3ae568e5-6efa-41a0-8172-efaec8f2e26d")
+		(property "Reference" "R4"
+			(at 264.16 99.06 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "nc"
+			(at 259.842 102.362 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 264.16 97.282 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 264.16 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 264.16 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "40082cd2-da70-4041-88ac-e4974d6502fb")
+		)
+		(pin "2"
+			(uuid "595e1b40-a078-436d-bc0d-87a80db5d1f6")
+		)
+		(instances
+			(project "pv_test_station"
+				(path "/bdb092a0-94d1-4700-b8bd-9fdfadb16bd3"
+					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3V")
 		(at 224.79 114.3 90)
 		(unit 1)
@@ -6397,7 +6635,7 @@
 				)
 			)
 		)
-		(property "Value" "Out"
+		(property "Value" "PV-Out"
 			(at 20.32 71.628 0)
 			(effects
 				(font
@@ -6672,6 +6910,73 @@
 			(project "pv_test_station"
 				(path "/bdb092a0-94d1-4700-b8bd-9fdfadb16bd3"
 					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 264.16 96.52 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6e9d8906-ed1c-4c02-8dda-8e5013e75857")
+		(property "Reference" "R3"
+			(at 264.16 96.52 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "nc"
+			(at 259.842 97.282 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 264.16 94.742 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 264.16 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 264.16 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4c959f82-4207-4162-aaad-1d49b799b46c")
+		)
+		(pin "2"
+			(uuid "5ccf3597-3685-498a-9410-0ad4b9f2f1dd")
+		)
+		(instances
+			(project ""
+				(path "/bdb092a0-94d1-4700-b8bd-9fdfadb16bd3"
+					(reference "R3")
 					(unit 1)
 				)
 			)
@@ -6953,6 +7258,73 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 264.16 101.6 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9570d070-de49-4ab0-adb5-2bb04802c922")
+		(property "Reference" "R5"
+			(at 264.16 101.854 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "nc"
+			(at 259.842 99.822 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 264.16 99.822 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 264.16 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 264.16 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "76e9a71a-21fe-4ca0-aed5-d2cd5faea674")
+		)
+		(pin "2"
+			(uuid "6cb0407a-c531-46aa-9d30-716b92189821")
+		)
+		(instances
+			(project "pv_test_station"
+				(path "/bdb092a0-94d1-4700-b8bd-9fdfadb16bd3"
+					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:Conn_01x02_Socket")
 		(at 20.32 62.23 0)
 		(mirror y)
@@ -6970,7 +7342,7 @@
 				)
 			)
 		)
-		(property "Value" "In"
+		(property "Value" "PV-In"
 			(at 21.336 60.452 0)
 			(effects
 				(font
@@ -7665,6 +8037,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3.3V")
+		(at 259.08 96.52 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c1c14f19-4941-4eca-957a-d59d079052a4")
+		(property "Reference" "#PWR019"
+			(at 262.89 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 255.27 96.5199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 259.08 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 259.08 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 259.08 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4027763e-8bd8-481b-88da-a66a91625d88")
+		)
+		(instances
+			(project "pv_test_station"
+				(path "/bdb092a0-94d1-4700-b8bd-9fdfadb16bd3"
+					(reference "#PWR019")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 44.45 86.36 0)
 		(unit 1)
@@ -8084,6 +8523,73 @@
 			(project ""
 				(path "/bdb092a0-94d1-4700-b8bd-9fdfadb16bd3"
 					(reference "IC1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 259.08 101.6 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fead5807-b7b9-4cd6-98e0-e673cc869a83")
+		(property "Reference" "#PWR021"
+			(at 262.89 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 255.27 101.5999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 259.08 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 259.08 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 259.08 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e26b3cdc-8435-498e-a799-e4370078a365")
+		)
+		(instances
+			(project "pv_test_station"
+				(path "/bdb092a0-94d1-4700-b8bd-9fdfadb16bd3"
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)

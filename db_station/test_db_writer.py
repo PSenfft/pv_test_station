@@ -1,24 +1,68 @@
-import influxdb_client, os, time
-from influxdb_client import InfluxDBClient, Point, WritePrecision
-from influxdb_client.client.write_api import SYNCHRONOUS
+import mysql.connector
+from mysql.connector import Error
+import random
+import datetime
 
+def create_connection(host_name, user_name, user_password, db_name):
+    """Create a database connection to a MariaDB database."""
+    connection = None
+    try:
+        connection = mysql.connector.connect(
+            host=host_name,
+            user=user_name,
+            password=user_password,
+            database=db_name,
+            port=3306
+        )
+        print("Connection to MariaDB successful")
+    except Error as e:
+        print(f"Error: '{e}'")
 
-# Replace the following with your InfluxDB connection details
-url = "http://raspberrypi.local:8086"                                                                    # InfluxDB URL
-token = "ZMaJlSEokqxFana4X3JT8cSP5T3iUQ1VQn67ql4mGhA8Rb8Wmtr4PQn-Rpu8cYKJj7uSuqHcfY7hX8yEIagwQw=="      # InfluxDB token
-org = "pv_test_station"                                                                                 # Your organization name                                                                                      # Your bucket name
-bucket="testbucket"
+    return connection
 
-# Initialize InfluxDB client
-client = InfluxDBClient(url=url, token=token, org=org)
+def insert_data(connection):
+    """Insert example data into the table."""
+    insert_query = """
+    INSERT INTO timestamp (timestamp, temp_panel, temp_env, voltage, current)
+    VALUES (%s, %s, %s, %s, %s);
+    """
 
-write_api = client.write_api(write_options=SYNCHRONOUS)
-   
-for value in range(5):
-  point = (
-    Point("measurement1")
-    .tag("tagname1", "tagvalue1")
-    .field("field1", value)
-  )
-  write_api.write(bucket=bucket, org="pv_test_station", record=point)
-  time.sleep(1) # separate points by 1 second
+    for i in range(1737017914, 1737019000):
+
+        # In ein datetime-Objekt konvertieren
+        dt_object = datetime.datetime.fromtimestamp(i)
+
+        # In das SQL-Format (YYYY-MM-DD HH:MM:SS) umwandeln
+        sql_timestamp = dt_object.strftime('%Y-%m-%d %H:%M:%S')
+
+        temp_panel = random.randint(1, 8000)
+        temp_env = random.randint(1, 8000)
+        voltage = random.randint(1, 4000)
+        current = random.randint(1, 4000)
+
+        example_data = [
+            (sql_timestamp, temp_panel, temp_env, voltage, current),
+        ]
+
+        cursor = connection.cursor()
+        try:
+            cursor.executemany(insert_query, example_data)
+            connection.commit()
+            print("Data inserted successfully")
+        except Error as e:
+            print(f"Error: '{e}'")
+
+if __name__ == "__main__":
+    # Change these credentials to match your MariaDB setup
+    host_name = "localhost"
+    user_name = "root"
+    user_password = "example"
+    db_name = "test_data"
+
+    connection = create_connection(host_name, user_name, user_password, db_name)
+
+    if connection is not None:
+        insert_data(connection)
+        connection.close()
+    else:
+        print("Failed to create database connection.")

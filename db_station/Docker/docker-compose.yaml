@@ -1,0 +1,21 @@
+# Use root/example as user/password credentials
+
+services:
+  mariadb:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+     - '3000:3000'
+    volumes:
+     - ./grafana_storage:/var/lib/grafana
