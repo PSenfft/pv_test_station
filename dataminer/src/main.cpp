@@ -5,10 +5,10 @@ RTC_DS3231 rtc;
 // Create a buffer to hold the binary data
 uint8_t buffer[11]; // 12 bits + 12 bits + 13 bits + 13 bits + 32 bits = ~82 bits = ~10.25 bytes, we use 8 bytes for alignment
 
-uint16_t voltage = 0;        // voltage in mV
-uint16_t current = 0;        // current in mA
-float temp_env = 0.0;          // temperature in °C with 4 digits behind the comma
-float temp_panel = 0.0;        // temperature in °C with 4 digits behind the comma
+float voltage = 0;        // voltage in V
+float current = 0;        // current in A
+float temp_env = 0.0;     // temperature in °C with 4 digits behind the comma
+float temp_panel = 0.0;   // temperature in °C with 4 digits behind the comma
 uint32_t timestamp = 0;
 
 Flags flags = {0, 0, 0};
@@ -42,35 +42,35 @@ void reset_temp_sensor_wakeup_timer(){
   previousMillis_temp_timper = currentMillis_temp_timer; // Reset the timer
 }
 
-uint16_t read_voltage(){
-  uint32_t adc_Value = analogRead(VOLTAGE_METER_PIN);
-  uint16_t voltage = (adc_Value / ADC_MAX) * V_REF;
+float read_voltage(){
+  float adc_Value = analogRead(VOLTAGE_METER_PIN);
+  float voltage = (adc_Value / ADC_MAX) * V_REF;
   return voltage;
 }
 
 //0.65V Voltage quicent
 //2,65V sensor saturation
 //Resulution 66.7mV/A
-uint16_t read_current(){     
-  uint32_t adc_Value = analogRead(CURRENT_METER_PIN);       //analog read 0-4095
+float read_current(){     
+  float adc_Value = analogRead(CURRENT_METER_PIN);       //analog read 0-4095
   
   // return 0 if current is below 0.65V
   if (adc_Value < 807){
     return 0;
   }
 
-  uint16_t voltage = (adc_Value / ADC_MAX) * V_REF;
-  uint16_t current = ((voltage - V_OFFSET) / V_SPAN) * I_MAX;
-  return current;                         //return current in mA
+  float voltage = (adc_Value / ADC_MAX) * MAX_VOLTAGE_PV; ;
+  float current = ((voltage - V_OFFSET) / V_SPAN) * I_MAX;
+  return current;                         //return current in A
 }
 
 void createPacket(uint8_t* packet) {
     // copy Data to  Byte-Array
     memcpy(packet, &temp_env, sizeof(float));
     memcpy(packet + sizeof(float), &temp_panel, sizeof(float));
-    memcpy(packet + 2 * sizeof(float), &voltage, sizeof(uint16_t));
-    memcpy(packet + 2 * sizeof(float) + sizeof(uint16_t), &current, sizeof(uint16_t));
-    memcpy(packet + 2 * sizeof(float) + 2 * sizeof(uint16_t), &timestamp, sizeof(uint32_t));
+    memcpy(packet + 2 * sizeof(float), &voltage, sizeof(float));
+    memcpy(packet + 2 * sizeof(float) + sizeof(float), &current, sizeof(float));
+    memcpy(packet + 2 * sizeof(float) + 2 * sizeof(float), &timestamp, sizeof(float));
 }
 
 void printPacket(uint8_t *packet, size_t length) {
@@ -85,11 +85,11 @@ void printPacket(uint8_t *packet, size_t length) {
 }
 
 void transmitData() {
-    uint8_t packet[16];  // 2 x float (8 Byte), 2 x uint16_t (4 Byte), 1 x uint32_t (4 Byte) -> 16 Byte
-    createPacket(packet);
+    uint8_t package[16];  // 2 x float (8 Byte), 2 x uint16_t (4 Byte), 1 x uint32_t (4 Byte) -> 16 Byte
+    createPacket(package);
 
-    printPacket(packet, sizeof(packet));
-    rf95.send(packet, sizeof(packet));
+    printPacket(package, sizeof(package));
+    rf95.send(package, sizeof(package));
 }
 
 // Function to convert ISO 8601 date to Unix timestamp
@@ -176,6 +176,8 @@ void check_timings(){
 
   flags.pps_interrupt = 0;
 }
+
+//TODO switch off relais, when Voltage is 1 min under 2V
 
 void init_rtc(){
   if (! rtc.begin()) {

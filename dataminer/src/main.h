@@ -20,14 +20,15 @@
 #define POSSIBLE_TIME 1000000000 // time at 2001, bigger the defult failur time from gps,  but still defitly wrong
 
 #define ADC_MAX 4095.0
-#define V_REF 3.3
-#define V_SAT 2.65
-#define V_OFFSET 0.65
+#define MAX_VOLTAGE_PV 43.0         // Max voltage of the PV panel in V
+#define V_REF 3.3                   // reference voltage in V
+#define V_SAT 2.65                  // saturation voltage in V
+#define V_OFFSET 0.65               // offset voltage in V (0,65V = 0A)
 #define V_SPAN (V_REF - V_OFFSET)
-#define I_MAX 30000 //30A as mA
+#define I_MAX 30.000 //30A
 
-extern uint16_t voltage;
-extern uint16_t current;
+extern float voltage;
+extern float current;
 extern float temp_env;
 extern float temp_panel;
 extern uint32_t timestamp;
@@ -40,8 +41,8 @@ struct Flags
   uint8_t temp_sensor_wakeup_triggert : 1; // flag for temp sensor wakeup
 };
 
-extern uint16_t voltage;        // voltage in mV
-extern uint16_t current;        // current in mA
+extern float voltage;        // voltage in mV
+extern float current;        // current in mA
 extern float temp_env;          // temperature in °C with 4 digits behind the comma
 extern float temp_panel;        // temperature in °C with 4 digits behind the comma
 extern uint32_t timestamp;

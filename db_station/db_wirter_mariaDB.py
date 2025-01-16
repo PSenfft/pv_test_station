@@ -78,30 +78,21 @@ def insert_data(connection, temp_panel, temp_env, voltage, current, timestamp):
     VALUES (%s, %s, %s, %s, %s);
     """
 
-    for i in range(1737017914, 1737019000):
+    # In ein datetime-Objekt konvertieren
+    dt_object = datetime.datetime.fromtimestamp(i)
 
-        # In ein datetime-Objekt konvertieren
-        dt_object = datetime.datetime.fromtimestamp(i)
+    # Convert to SQL-Format (YYYY-MM-DD HH:MM:SS)
+    sql_timestamp = dt_object.strftime('%Y-%m-%d %H:%M:%S')
 
-        # Convert to SQL-Format (YYYY-MM-DD HH:MM:SS)
-        sql_timestamp = dt_object.strftime('%Y-%m-%d %H:%M:%S')
+    measure_package = [(sql_timestamp, temp_panel, temp_env, voltage, current)]
 
-        temp_panel = random.randint(1, 8000)
-        temp_env = random.randint(1, 8000)
-        voltage = random.randint(1, 4000)
-        current = random.randint(1, 4000)
-
-        example_data = [
-            (sql_timestamp, temp_panel, temp_env, voltage, current),
-        ]
-
-        cursor = connection.cursor()
-        try:
-            cursor.executemany(insert_query, example_data)
-            connection.commit()
-            print("Data inserted successfully")
-        except Error as e:
-            print(f"Error: '{e}'")
+    cursor = connection.cursor()
+    try:
+        cursor.executemany(insert_query, measure_package)
+        connection.commit()
+        print("Data inserted successfully")
+    except Error as e:
+        print(f"Error: '{e}'")
 
 
 
