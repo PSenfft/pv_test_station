@@ -79,7 +79,7 @@ def insert_data(connection, temp_panel, temp_env, voltage, current, timestamp):
     """
 
     # In ein datetime-Objekt konvertieren
-    dt_object = datetime.datetime.fromtimestamp(i)
+    dt_object = datetime.datetime.fromtimestamp(timestamp)
 
     # Convert to SQL-Format (YYYY-MM-DD HH:MM:SS)
     sql_timestamp = dt_object.strftime('%Y-%m-%d %H:%M:%S')
