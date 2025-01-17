@@ -23,7 +23,7 @@ def create_connection(host_name, user_name, user_password, db_name):
 def insert_data(connection):
     """Insert example data into the table."""
     insert_query = """
-    INSERT INTO timestamp (timestamp, temp_panel, temp_env, voltage, current)
+    INSERT INTO data_measurements (timestamp, temp_panel, temp_env, voltage, current)
     VALUES (%s, %s, %s, %s, %s);
     """
 
@@ -35,10 +35,10 @@ def insert_data(connection):
         # In das SQL-Format (YYYY-MM-DD HH:MM:SS) umwandeln
         sql_timestamp = dt_object.strftime('%Y-%m-%d %H:%M:%S')
 
-        temp_panel = random.randint(1, 8000)
-        temp_env = random.randint(1, 8000)
-        voltage = random.randint(1, 4000)
-        current = random.randint(1, 4000)
+        temp_panel = random.uniform(21, 23.25)
+        temp_env = 0
+        voltage = random.uniform(0, 43.000)
+        current = random.uniform(0, 30.000)
 
         example_data = [
             (sql_timestamp, temp_panel, temp_env, voltage, current),
@@ -54,10 +54,10 @@ def insert_data(connection):
 
 if __name__ == "__main__":
     # Change these credentials to match your MariaDB setup
-    host_name = "localhost"
+    host_name = "raspberrypi"
     user_name = "root"
     user_password = "example"
-    db_name = "test_data"
+    db_name = "pv_measurements_db"
 
     connection = create_connection(host_name, user_name, user_password, db_name)
 

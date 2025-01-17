@@ -84,7 +84,7 @@ def insert_data(connection, temp_panel, temp_env, voltage, current, timestamp):
     # Convert to SQL-Format (YYYY-MM-DD HH:MM:SS)
     sql_timestamp = dt_object.strftime('%Y-%m-%d %H:%M:%S')
 
-    measure_package = [(sql_timestamp, temp_panel, temp_env, voltage, current)]
+    measure_package = [(sql_timestamp, temp_panel, temp_env, voltage, current),]
 
     cursor = connection.cursor()
     try:
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
             if connection is not None:
                 insert_data(connection, temp_panel, temp_env, voltage, current, timestamp)
-                connection.close()
+                
             else:
                 print("Failed to create database connection.")
             
