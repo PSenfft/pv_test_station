@@ -27,6 +27,10 @@
 #define V_SPAN (V_REF - V_OFFSET)
 #define I_MAX 30.000 //30A
 
+const unsigned long interval = 1000; // interval at which to collect data (milliseconds)
+unsigned long previousMillis = 0;
+unsigned long currentMillis = 0;   
+
 extern float voltage;
 extern float current;
 extern float temp_env;
@@ -39,6 +43,7 @@ struct Flags
   uint8_t use_gps_pps : 1;      // flag for util timer
   uint8_t use_gps_time : 1;     // flag for GPS connection
   uint8_t temp_sensor_wakeup_triggert : 1; // flag for temp sensor wakeup
+  uint8_t rtc_time_trigger : 1; // flag for rtc time trigger
 };
 
 extern float voltage;        // voltage in mV

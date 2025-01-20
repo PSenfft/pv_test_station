@@ -65,12 +65,21 @@ float read_current(){
 }
 
 void createPacket(uint8_t* packet) {
-    // copy Data to  Byte-Array
-    memcpy(packet, &temp_env, sizeof(float));
-    memcpy(packet + sizeof(float), &temp_panel, sizeof(float));
-    memcpy(packet + 2 * sizeof(float), &voltage, sizeof(float));
-    memcpy(packet + 2 * sizeof(float) + sizeof(float), &current, sizeof(float));
-    memcpy(packet + 2 * sizeof(float) + 2 * sizeof(float), &timestamp, sizeof(float));
+    // 1. Konvertiere Float-Werte in Network Byte Order
+    uint32_t temp_env_network = htonl(*(uint32_t*)&temp_env);
+    uint32_t temp_panel_network = htonl(*(uint32_t*)&temp_panel);
+    uint32_t voltage_network = htonl(*(uint32_t*)&voltage);
+    uint32_t current_network = htonl(*(uint32_t*)&current);
+    
+    // 2. Konvertiere den Timestamp in Network Byte Order
+    uint32_t timestamp_network = htonl(timestamp);
+
+    // 3. Kopiere die Werte ins Paket
+    memcpy(packet, &temp_env_network, sizeof(uint32_t));
+    memcpy(packet + sizeof(uint32_t), &temp_panel_network, sizeof(uint32_t));
+    memcpy(packet + 2 * sizeof(uint32_t), &voltage_network, sizeof(uint32_t));
+    memcpy(packet + 3 * sizeof(uint32_t), &current_network, sizeof(uint32_t));
+    memcpy(packet + 4 * sizeof(uint32_t), &timestamp_network, sizeof(uint32_t));
 }
 
 void printPacket(uint8_t *packet, size_t length) {
@@ -85,7 +94,7 @@ void printPacket(uint8_t *packet, size_t length) {
 }
 
 void transmitData() {
-    uint8_t package[16];  // 2 x float (8 Byte), 2 x uint16_t (4 Byte), 1 x uint32_t (4 Byte) -> 16 Byte
+    uint8_t package[20];  // 4 x float (16 Byte) 1 x uint32_t (4 Byte) -> 20 Byte
     createPacket(package);
 
     printPacket(package, sizeof(package));
@@ -131,14 +140,8 @@ void measure_everything(){
   Serial.print("temp: ");
   Serial.println(temp_env, 4);
 
-  if (flags.use_gps_time){
-    Serial.println("Using GPS time");
-    timestamp = get_unix_time_from_gps();
-  }else{
-    Serial.println("Using RTC time");
-    Serial.println(rtc.now().timestamp());
-    timestamp = timestamp_to_unix(rtc.now().timestamp());
-  }
+  timestamp = timestamp_to_unix(rtc.now().timestamp());
+  
   Serial.print("time: ");
   Serial.println(timestamp);
 
@@ -177,6 +180,16 @@ void check_timings(){
   flags.pps_interrupt = 0;
 }
 
+void check_rtc_time_trigger(){
+   if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis; // Speichere die aktuelle Zeit
+    flags.rtc_time_trigger = 1;
+
+    // Debug-Ausgabe
+    Serial.println("1 Sekunde vergangen, Flag gesetzt!");
+   }
+}
+
 //TODO switch off relais, when Voltage is 1 min under 2V
 
 void init_rtc(){
@@ -211,7 +224,13 @@ void setup() {
 
 void loop() {
   currentMillis_temp_timer = millis();
+  currentMillis = millis();
   temp_sensor_wakeup_timer();
-  check_timings();
+  check_rtc_time_trigger();
+  
+   if (flags.rtc_time_trigger) {
+    measure_everything();
+    flags.rtc_time_trigger = false;
+   }
 }
 
